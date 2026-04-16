@@ -1,21 +1,3 @@
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.animation import FuncAnimation
-
-# =========================================================
-# XENAKIS-VĒLS STRANGE ATTRACTOR ALIFE SYSTEM
-# =========================================================
-
-# ---------- organism dynamics ----------
-def step(x, y, z, p):
-    a, b, c, d, e = p
-
-    x_new = np.sin(a * y) + e * np.cos(b * x)
-    y_new = np.sin(b * z) + e * np.cos(c * y)
-    z_new = np.sin(c * x) - np.cos(d * z)
-
-    return x_new, y_new, z_new
-python
 # SPDX-License-Identifier: GPL-3.0-or-later
 #
 # This program is free software: you can redistribute it and/or modify
@@ -30,18 +12,25 @@ python
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <https://www.gnu.org/licenses/>.
-And in your LICENSE file, use:
 
-text
-GNU General Public License, version 3 (GPL-3.0-or-later)
-See: https://www.gnu.org/licenses/gpl-3.0.html
-for traj in branches:
-    ax.plot(traj[:,0], traj[:,1], traj[:,2],
-            linewidth=0.2, color='black', alpha=0.5)
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.animation import FuncAnimation
 
-ax.set_axis_off()
-plt.tight_layout()
-plt.show()
+# =========================================================
+# XENAKIS‑VĒLS STRANGE‑ATTRACTOR ARTIFICIAL LIFE SYSTEM
+# =========================================================
+
+# ---------- organism dynamics ----------
+def step(x, y, z, p):
+    a, b, c, d, e = p
+
+    x_new = np.sin(a * y) + e * np.cos(b * x)
+    y_new = np.sin(b * z) + e * np.cos(c * y)
+    z_new = np.sin(c * x) - np.cos(d * z)
+
+    return x_new, y_new, z_new
+
 
 # ---------- genome mutation ----------
 def mutate(genome):
@@ -61,10 +50,7 @@ def mutate(genome):
 def fitness(traj):
     traj = np.array(traj)
 
-    # stability = coherence of attractor
     stability = 1 / (1 + np.std(traj))
-
-    # spatial richness = prevents collapse
     spread = np.mean(np.linalg.norm(traj - np.mean(traj, axis=0), axis=1))
 
     return 0.7 * stability + 0.3 * (spread / (1 + spread))
@@ -74,7 +60,8 @@ def fitness(traj):
 def spawn():
     return {
         "state": np.random.uniform(-1, 1, 3),
-        "genome": np.array([1.4, -1.6, 1.0, -0.7, 0.5])
+        "genome": np.array([1.4, -1.6, 1.0, -0.7, 0.5]),
+        "species": np.random.randint(0, 10)
     }
 
 
@@ -93,7 +80,7 @@ def simulate(pop, steps=250, max_pop=40):
         for _ in range(steps):
             x, y, z = step(x, y, z, p)
 
-            # internal adaptive drift (metabolic pressure)
+            # internal adaptive drift
             p += 0.002 * np.array([
                 np.sin(z),
                 np.cos(x),
@@ -107,7 +94,7 @@ def simulate(pop, steps=250, max_pop=40):
         fit = fitness(traj)
 
         if fit > 0.25:
-            frame.append((np.array(traj), org.get("species", 0)))
+            frame.append((np.array(traj), org["species"]))
 
             # reproduction proportional to fitness
             offspring = int(1 + fit * 3)
@@ -116,10 +103,10 @@ def simulate(pop, steps=250, max_pop=40):
                 new_pop.append({
                     "state": np.array([x, y, z]) + np.random.normal(0, 0.05, 3),
                     "genome": mutate(g),
-                    "species": org.get("species", np.random.randint(0, 5))
+                    "species": org["species"]
                 })
 
-    # population control (ecological pressure)
+    # ecological pressure
     if len(new_pop) > max_pop:
         new_pop = list(np.random.choice(new_pop, max_pop, replace=False))
 
@@ -133,9 +120,7 @@ fig = plt.figure(figsize=(8, 8))
 ax = fig.add_subplot(111, projection='3d')
 ax.set_axis_off()
 
-# ---------- initial population ----------
 population = [spawn() for _ in range(35)]
-
 angle = 0
 
 def update(frame_id):
@@ -149,14 +134,12 @@ def update(frame_id):
 
     for traj, species in frame:
         color = colors[species % len(colors)]
-
         ax.plot(traj[:, 0], traj[:, 1], traj[:, 2],
                 linewidth=0.5,
                 color=color,
                 alpha=0.7)
 
-    ax.set_title(f"Xenakis-Vēls ALife — t={frame_id}", fontsize=10)
-
+    ax.set_title(f"Xenakis‑Vēls ALife — t={frame_id}", fontsize=10)
     angle += 2
 
 
