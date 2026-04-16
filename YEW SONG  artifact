@@ -1,0 +1,62 @@
+import numpy as np
+import soundfile as sf
+
+# ---------------------------------------------
+# YEW SUPRA-ORGANISM RAW FRACTAL WAVEFORM
+# ---------------------------------------------
+
+SAMPLE_RATE = 44100
+DURATION = 30  # seconds
+DEPTH = 6      # recursion depth
+BASE_FREQ = 55.0  # F1 fundamental
+AXIS_WEIGHT = 0.35
+TWIST_VARIANCE = 0.12
+
+def branch(freq, depth, pan, t):
+    """Recursive branch → recursive tone."""
+    if depth == 0:
+        return np.zeros_like(t), np.zeros_like(t)
+
+    # Base sine
+    jitter = np.random.uniform(-TWIST_VARIANCE, TWIST_VARIANCE)
+    tone = np.sin(2 * np.pi * (freq * (1 + jitter)) * t)
+
+    # Amplitude decays with depth
+    amp = 1.0 / (depth + 1)
+
+    # Stereo placement
+    left = tone * amp * (1 - pan)
+    right = tone * amp * pan
+
+    # Recurse into two children
+    left_child_l, left_child_r = branch(freq * 1.618, depth - 1, max(0, pan - 0.15), t)
+    right_child_l, right_child_r = branch(freq * 1.333, depth - 1, min(1, pan + 0.15), t)
+
+    return (
+        left + left_child_l + right_child_l,
+        right + left_child_r + right_child_r
+    )
+
+def generate_yew_waveform():
+    t = np.linspace(0, DURATION, int(SAMPLE_RATE * DURATION), endpoint=False)
+
+    # Axis drone (the spine of the organism)
+    axis = np.sin(2 * np.pi * BASE_FREQ * t) * AXIS_WEIGHT
+
+    # Recursive organism branches
+    left, right = branch(BASE_FREQ * 2, DEPTH, 0.5, t)
+
+    # Combine
+    stereo = np.vstack([
+        axis + left,
+        axis + right
+    ]).T
+
+    # Normalize
+    stereo /= np.max(np.abs(stereo))
+
+    sf.write("yew_supra_organism.wav", stereo, SAMPLE_RATE)
+    print("Generated: yew_supra_organism.wav")
+
+if __name__ == "__main__":
+    generate_yew_waveform()
