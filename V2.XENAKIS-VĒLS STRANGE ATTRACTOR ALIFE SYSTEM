@@ -1,17 +1,34 @@
-# SPDX-License-Identifier: GPL-3.0-or-later
+# ============================================================================
+# Xenakis‑Vēls Strange‑Attractor Artificial Life System
+# Copyright (c) 2026  Darrell Lee Stiltner
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
 #
 # This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License
-# along with this program. If not, see <https://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+# Additional Terms — Sovereign Addendum v1.0:
+#   • Non‑violence invariant: no military, weapons, or surveillance use.
+#   • User sovereignty: no vendor lock‑in; data portability required.
+#   • AI/ML restriction: commercial AI training requires separate license.
+#   • Fractal correctness: derivatives must retain this license + addendum.
+#   • Community enforcement: violations terminate rights automatically.
+#
+# Trademarks:
+#   “Xenakis‑Vēls ALife” is a trademark of Darrell Lee Stiltner.
+#   Use of the name requires permission.
+# ============================================================================
+
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -145,3 +162,33 @@ def update(frame_id):
 
 ani = FuncAnimation(fig, update, interval=120)
 plt.show()
+# ============================================================================
+# Xenakis‑Vēls Strange‑Attractor Artificial Life System
+# Copyright (c) 2026  Darrell Lee Stiltner
+#
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#
+# Additional Terms —  Sovereign Addendum v1.0:
+#   • Non‑violence invariant: no military, weapons, or surveillance use.
+#   • User sovereignty: no vendor lock‑in; data portability required.
+#   • AI/ML restriction: commercial AI training requires separate license.
+#   • Fractal correctness: derivatives must retain this license + addendum.
+#   • Community enforcement: violations terminate rights automatically.
+#
+# Trademarks:
+#   “Xenakis‑Vēls ALife” is a trademark of Darrell Lee Stiltner.
+#   Use of the name requires permission.
+# ============================================================================
